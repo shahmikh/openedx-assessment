@@ -1,0 +1,9 @@
+cloudWatch:
+  enabled: true
+  region: <AWS_REGION>
+  logGroupName: /eks/openedx
+  logStreamPrefix: fluentbit-
+
+serviceAccount:
+  create: true
+  name: aws-for-fluent-bit

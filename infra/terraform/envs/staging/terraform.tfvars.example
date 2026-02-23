@@ -1,0 +1,35 @@
+aws_region = "us-east-1"
+name       = "openedx-staging"
+
+tags = {
+  Project = "openedx"
+  Env     = "staging"
+}
+
+vpc_cidr        = "10.15.0.0/16"
+azs             = ["us-east-1a", "us-east-1b"]
+private_subnets = ["10.15.1.0/24", "10.15.2.0/24"]
+public_subnets  = ["10.15.101.0/24", "10.15.102.0/24"]
+
+eks_version        = "1.29"
+node_instance_types = ["t3.large"]
+node_min_size      = 2
+node_max_size      = 4
+node_desired_size  = 2
+
+mysql_db_name          = "openedx"
+mysql_username         = "openedx"
+mysql_password         = "CHANGE_ME"
+mysql_engine_version   = "8.0"
+mysql_instance_class   = "db.m6i.large"
+mysql_allocated_storage = 50
+
+
+redis_engine_version    = "7.1"
+redis_node_type         = "cache.r6g.large"
+redis_num_cache_clusters = 2
+
+lb_dns_name        = "CHANGE_ME_AFTER_INGRESS"
+acm_cert_arn       = "CHANGE_ME_US_EAST_1"
+cloudfront_price_class = "PriceClass_100"
+waf_rate_limit     = 2000

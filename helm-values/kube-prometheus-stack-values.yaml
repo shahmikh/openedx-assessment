@@ -1,0 +1,12 @@
+grafana:
+  adminPassword: "CHANGE_ME"
+  service:
+    type: ClusterIP
+
+prometheus:
+  prometheusSpec:
+    retention: 15d
+    serviceMonitorSelectorNilUsesHelmValues: false
+
+alertmanager:
+  enabled: true

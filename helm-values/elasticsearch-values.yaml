@@ -1,0 +1,46 @@
+master:
+  replicaCount: 3
+  persistence:
+    enabled: true
+    storageClass: gp3
+    size: 50Gi
+  resources:
+    requests:
+      cpu: "500m"
+      memory: "2Gi"
+    limits:
+      cpu: "1"
+      memory: "4Gi"
+
+data:
+  replicaCount: 3
+  persistence:
+    enabled: true
+    storageClass: gp3
+    size: 100Gi
+  resources:
+    requests:
+      cpu: "500m"
+      memory: "2Gi"
+    limits:
+      cpu: "1"
+      memory: "4Gi"
+
+coordinating:
+  replicaCount: 2
+  resources:
+    requests:
+      cpu: "250m"
+      memory: "512Mi"
+    limits:
+      cpu: "500m"
+      memory: "1Gi"
+
+security:
+  enabled: false
+
+podAntiAffinityPreset: hard
+podAntiAffinityTopologyKey: topology.kubernetes.io/zone
+
+plugins:
+  - repository-s3

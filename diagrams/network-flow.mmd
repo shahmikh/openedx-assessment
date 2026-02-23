@@ -1,0 +1,18 @@
+sequenceDiagram
+  participant U as User
+  participant CF as CloudFront
+  participant WAF as AWS WAF
+  participant NLB as NLB
+  participant NG as Nginx Ingress
+  participant LMS as LMS
+  participant CMS as CMS
+  participant DB as Data Services
+
+  U->>CF: HTTPS request
+  CF->>WAF: Forward
+  WAF->>NLB: Allowed traffic
+  NLB->>NG: Route
+  NG->>LMS: lms.<domain>
+  NG->>CMS: studio.<domain>
+  LMS->>DB: External DB calls
+  CMS->>DB: External DB calls

@@ -1,0 +1,25 @@
+apiVersion: monitoring.coreos.com/v1
+kind: PrometheusRule
+metadata:
+  name: openedx-alerts
+  namespace: monitoring
+spec:
+  groups:
+    - name: openedx.rules
+      rules:
+        - alert: OpenEdXHighCPU
+          expr: sum(rate(container_cpu_usage_seconds_total{namespace="openedx"}[5m])) > 2
+          for: 5m
+          labels:
+            severity: warning
+          annotations:
+            summary: "OpenEdX CPU usage high"
+            description: "CPU usage in openedx namespace exceeded 2 cores for 5 minutes."
+        - alert: OpenEdXPodRestarting
+          expr: increase(kube_pod_container_status_restarts_total{namespace="openedx"}[10m]) > 3
+          for: 10m
+          labels:
+            severity: critical
+          annotations:
+            summary: "OpenEdX pod restarting frequently"
+            description: "Pod restarts in openedx namespace exceeded threshold."

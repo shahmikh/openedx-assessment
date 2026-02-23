@@ -1,0 +1,75 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: openedx-nginx-conf
+  namespace: openedx
+data:
+  nginx.conf: |
+    worker_processes auto;
+    events { worker_connections 1024; }
+    http {
+      server {
+        listen 80;
+        server_name lms.<your-domain>;
+        location / {
+          proxy_pass http://lms:80;
+          proxy_set_header Host $host;
+          proxy_set_header X-Real-IP $remote_addr;
+          proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+          proxy_set_header X-Forwarded-Proto $scheme;
+        }
+      }
+      server {
+        listen 80;
+        server_name studio.<your-domain>;
+        location / {
+          proxy_pass http://cms:80;
+          proxy_set_header Host $host;
+          proxy_set_header X-Real-IP $remote_addr;
+          proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+          proxy_set_header X-Forwarded-Proto $scheme;
+        }
+      }
+    }
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: openedx-nginx
+  namespace: openedx
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: openedx-nginx
+  template:
+    metadata:
+      labels:
+        app: openedx-nginx
+    spec:
+      containers:
+        - name: nginx
+          image: nginx:1.25-alpine
+          ports:
+            - containerPort: 80
+          volumeMounts:
+            - name: nginx-conf
+              mountPath: /etc/nginx/nginx.conf
+              subPath: nginx.conf
+      volumes:
+        - name: nginx-conf
+          configMap:
+            name: openedx-nginx-conf
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: openedx-nginx
+  namespace: openedx
+spec:
+  selector:
+    app: openedx-nginx
+  ports:
+    - port: 80
+      targetPort: 80
+  type: ClusterIP

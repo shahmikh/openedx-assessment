@@ -1,0 +1,31 @@
+LMS_HOST: lms.<your-domain>
+CMS_HOST: studio.<your-domain>
+K8S_NAMESPACE: openedx
+ENABLE_HTTPS: false
+CADDY_ENABLED: false
+
+# External services
+MYSQL_HOST: <rds-endpoint>
+MYSQL_PORT: 3306
+MYSQL_USERNAME: openedx
+MYSQL_PASSWORD: <mysql-password>
+MYSQL_DATABASE: openedx
+
+# MongoDB replica set or single node (service in openedx-db)
+MONGO_HOST: mongodb.openedx-db.svc.cluster.local
+MONGO_PORT: 27017
+MONGO_USERNAME: openedx
+MONGO_PASSWORD: <mongo-password>
+
+# Elasticsearch service in openedx-db
+ELASTICSEARCH_HOST: elasticsearch.openedx-db.svc.cluster.local
+ELASTICSEARCH_PORT: 9200
+ELASTICSEARCH_USE_SSL: false
+ELASTICSEARCH_USERNAME: <es-username>
+ELASTICSEARCH_PASSWORD: <es-password>
+
+REDIS_HOST: <redis-endpoint>
+REDIS_PORT: 6379
+
+# Storage
+OPENEDX_MEDIA_ROOT: /openedx/media

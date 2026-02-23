@@ -1,0 +1,17 @@
+flowchart LR
+  A["Users"] --> B["CloudFront"]
+  B --> C["AWS WAF"]
+  C --> D["NLB"]
+  D --> E["Nginx Ingress"]
+  E --> F["OpenEdX LMS"]
+  E --> G["OpenEdX CMS"]
+  F --> H["RDS MySQL"]
+  F --> I["MongoDB (StatefulSet)"]
+  F --> J["Elasticsearch (StatefulSet)"]
+  F --> K["ElastiCache Redis"]
+  F --> L["EFS"]
+  G --> H
+  G --> I
+  G --> J
+  G --> K
+  G --> L

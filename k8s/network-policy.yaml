@@ -1,0 +1,39 @@
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: openedx-allow-ingress
+  namespace: openedx
+spec:
+  podSelector: {}
+  policyTypes:
+    - Ingress
+    - Egress
+  ingress:
+    - from:
+        - namespaceSelector:
+            matchLabels:
+              kubernetes.io/metadata.name: ingress-nginx
+  egress:
+    - to:
+        - namespaceSelector:
+            matchLabels:
+              kubernetes.io/metadata.name: openedx-db
+      ports:
+        - protocol: TCP
+          port: 27017
+        - protocol: TCP
+          port: 9200
+    - to:
+        - ipBlock:
+            cidr: 0.0.0.0/0
+      ports:
+        - protocol: TCP
+          port: 3306
+        - protocol: TCP
+          port: 27017
+        - protocol: TCP
+          port: 9200
+        - protocol: TCP
+          port: 6379
+        - protocol: TCP
+          port: 2049
