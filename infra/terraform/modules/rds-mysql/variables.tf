@@ -9,4 +9,7 @@ variable "subnet_ids" { type = list(string) }
 variable "sg_id" { type = string }
 variable "multi_az" { type = bool }
 variable "backup_retention_period" { type = number }
-variable "tags" { type = map(string) default = {} }
+variable "tags" {
+  type    = map(string)
+  default = {}
+}

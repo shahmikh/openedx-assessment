@@ -30,6 +30,7 @@ redis_node_type         = "cache.r6g.large"
 redis_num_cache_clusters = 2
 
 lb_dns_name        = "CHANGE_ME_AFTER_INGRESS"
-acm_cert_arn       = "CHANGE_ME_US_EAST_1"
+acm_cert_arn       = ""
+origin_protocol_policy = "http-only"
 cloudfront_price_class = "PriceClass_100"
 waf_rate_limit     = 2000

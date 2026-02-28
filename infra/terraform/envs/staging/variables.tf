@@ -1,6 +1,9 @@
 variable "aws_region" { type = string }
 variable "name" { type = string }
-variable "tags" { type = map(string) default = {} }
+variable "tags" {
+  type    = map(string)
+  default = {}
+}
 
 variable "vpc_cidr" { type = string }
 variable "azs" { type = list(string) }
@@ -26,6 +29,13 @@ variable "redis_node_type" { type = string }
 variable "redis_num_cache_clusters" { type = number }
 
 variable "lb_dns_name" { type = string }
-variable "acm_cert_arn" { type = string }
+variable "acm_cert_arn" {
+  type    = string
+  default = ""
+}
+variable "origin_protocol_policy" {
+  type    = string
+  default = "http-only"
+}
 variable "cloudfront_price_class" { type = string }
 variable "waf_rate_limit" { type = number }

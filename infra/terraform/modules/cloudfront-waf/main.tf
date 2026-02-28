@@ -1,3 +1,11 @@
+terraform {
+  required_providers {
+    aws = {
+      source = "hashicorp/aws"
+    }
+  }
+}
+
 resource "aws_wafv2_web_acl" "this" {
   name  = "${var.name}-waf"
   scope = "CLOUDFRONT"
@@ -10,7 +18,9 @@ resource "aws_wafv2_web_acl" "this" {
     name     = "AWSManagedRulesCommonRuleSet"
     priority = 1
 
-    override_action { none {} }
+    override_action {
+      none {}
+    }
 
     statement {
       managed_rule_group_statement {
@@ -30,7 +40,9 @@ resource "aws_wafv2_web_acl" "this" {
     name     = "RateLimit"
     priority = 2
 
-    action { block {} }
+    action {
+      block {}
+    }
 
     statement {
       rate_based_statement {
@@ -58,6 +70,10 @@ resource "aws_cloudfront_distribution" "this" {
   default_root_object = "index.html"
   price_class         = var.price_class
 
+  # CloudFront requires an origin certificate for HTTPS.
+  # Use http-only when no trusted cert/domain is available yet.
+  # Switch to https-only after ACM + domain are configured at Nginx.
+
   origin {
     domain_name = var.lb_dns_name
     origin_id   = "lbOrigin"
@@ -65,7 +81,7 @@ resource "aws_cloudfront_distribution" "this" {
     custom_origin_config {
       http_port              = 80
       https_port             = 443
-      origin_protocol_policy = "https-only"
+      origin_protocol_policy = var.origin_protocol_policy
       origin_ssl_protocols   = ["TLSv1.2"]
     }
   }
@@ -87,9 +103,10 @@ resource "aws_cloudfront_distribution" "this" {
   }
 
   viewer_certificate {
-    acm_certificate_arn = var.acm_cert_arn
-    ssl_support_method  = "sni-only"
-    minimum_protocol_version = "TLSv1.2_2021"
+    cloudfront_default_certificate = var.acm_cert_arn == ""
+    acm_certificate_arn            = var.acm_cert_arn != "" ? var.acm_cert_arn : null
+    ssl_support_method             = var.acm_cert_arn != "" ? "sni-only" : null
+    minimum_protocol_version       = var.acm_cert_arn != "" ? "TLSv1.2_2021" : "TLSv1"
   }
 
   restrictions {

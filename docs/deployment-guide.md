@@ -152,4 +152,6 @@ Terraform module creates CloudFront and WAF. Set `lb_dns_name` to the NLB DNS fr
 ```
 kubectl get svc -n ingress-nginx ingress-nginx-controller
 ```
+If you do not have a domain/certificate yet, keep `acm_cert_arn = ""` and `origin_protocol_policy = "http-only"` in `terraform.tfvars` to use the default CloudFront certificate temporarily.
+For final production hardening, set a valid ACM cert in `us-east-1` and switch `origin_protocol_policy` to `https-only`.
 Update DNS to point to CloudFront distribution. Evidence instructions in docs/evidence-checklist.md.

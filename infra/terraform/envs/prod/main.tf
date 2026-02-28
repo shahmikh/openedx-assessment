@@ -154,6 +154,7 @@ module "cloudfront_waf" {
   name         = var.name
   lb_dns_name  = var.lb_dns_name
   acm_cert_arn = var.acm_cert_arn
+  origin_protocol_policy = var.origin_protocol_policy
   price_class  = var.cloudfront_price_class
   rate_limit   = var.waf_rate_limit
   tags         = var.tags
